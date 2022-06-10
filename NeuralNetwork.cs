@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using NeuralNetworkExceptions;
 
 namespace NeuralNetwork {
     public abstract class NeuralNetworkSaver {
@@ -81,7 +82,7 @@ namespace NeuralNetwork {
         private List<double> neuralNetwork_output;
         private neuralNetworkOptions options;
 
-        public neuralNetwork( neuralNetworkOptions newOptions ) {
+        public NeuralNetwork( neuralNetworkOptions newOptions ) {
             options = newOptions;
             switch ( options.Type ) {
                 case neuralNetworkOptions.NeuralNetworkType.Perceptron:
@@ -101,9 +102,8 @@ namespace NeuralNetwork {
                     break;
             }
         }
-        public neuralNetwork() {
-                
-        }
+        public NeuralNetwork() {}
+
         private void GenerateAutoEncoder() {
             if ( options.UseInputLayer ) {
                 input_layer = new Layer( "input", options.InputNeuronsCount, options.UseBiasNeurons );
@@ -468,7 +468,7 @@ namespace NeuralNetwork {
                     inputNeuronsCount = value;
                 }
                 else {
-                    throw new neuralNetworkOptionsException( "Count of neurons can't be less than 1." );
+                    throw new NeuralNetworkOptionsException( "Count of neurons can't be less than 1." );
                 }
             }
         }
@@ -479,7 +479,7 @@ namespace NeuralNetwork {
                     middleNeuronsCount = value;
                 }
                 else {
-                    throw new neuralNetworkOptionsException( "Count of neurons can't be less than 1." );
+                    throw new NeuralNetworkOptionsException( "Count of neurons can't be less than 1." );
                 }
             }
         }
@@ -490,7 +490,7 @@ namespace NeuralNetwork {
                     outputNeuronsCount = value;
                 }
                 else {
-                    throw new neuralNetworkOptionsException( "Count of neurons can't be less than 1." );
+                    throw new NeuralNetworkOptionsException( "Count of neurons can't be less than 1." );
                 }
             }
         }
@@ -501,7 +501,7 @@ namespace NeuralNetwork {
                     middleLayersCount = value;
                 }
                 else {
-                    throw new neuralNetworkOptionsException( "Count of middle layers can't be negative." );
+                    throw new NeuralNetworkOptionsException( "Count of middle layers can't be negative." );
                 }
             }
         }
@@ -518,7 +518,7 @@ namespace NeuralNetwork {
                     learningSpeed = value;
                 }
                 else {
-                    throw new neuralNetworkOptionsException( "Learning speed can't be less than 0 and more than 1." );
+                    throw new NeuralNetworkOptionsException( "Learning speed can't be less than 0 and more than 1." );
                 }
             }
         }
@@ -529,7 +529,7 @@ namespace NeuralNetwork {
                     moment = value;
                 }
                 else {
-                    throw new neuralNetworkOptionsException( "Moment can't be less than 0 and more than 1." );
+                    throw new NeuralNetworkOptionsException( "Moment can't be less than 0 and more than 1." );
                 }
             }
         }
@@ -562,27 +562,6 @@ namespace NeuralNetwork {
         private double learningSpeed = 0.7;
         private double moment = 0.3;
     }
-
-    internal class ModelException : Exception {
-        internal ModelException(string message)
-        : base(message) { }
-    }
-    internal class neuralNetworkException : Exception {
-        internal neuralNetworkException(string message)
-        : base(message) { }
-    }
-    internal class LayerException : Exception {
-        internal LayerException(string message)
-        : base(message) { }
-    }
-    internal class neuralNetworkOptionsException : Exception {
-        internal neuralNetworkOptionsException(string message)
-        : base(message) { }
-    }
-    internal class DatasetException : Exception {
-        internal DatasetException(string message)
-        : base(message) { }
-    }
 }
 
 namespace ErrorController {
@@ -604,5 +583,15 @@ namespace ErrorController {
                 }
             return outError / i;
         }
+    }
+}
+namespace NeuralNetworkExceptions {
+    internal class LayerException : Exception {
+        internal LayerException(string message)
+        : base(message) { }
+    }
+    internal class NeuralNetworkOptionsException : Exception {
+        internal NeuralNetworkOptionsException(string message)
+        : base(message) { }
     }
 }

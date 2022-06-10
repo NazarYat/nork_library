@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
+using DatasetExceptions;
 
 namespace DatasetCreator {
     [Serializable]
@@ -223,5 +224,11 @@ namespace DatasetCreator {
                 return new Dataset();
             }
         }
+    }
+}
+namespace DatasetExceptions {
+    internal class DatasetException : Exception {
+        internal DatasetException(string message)
+        : base(message) { }
     }
 }
