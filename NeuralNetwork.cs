@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using NeuralNetworkExceptions;
 
-namespace NeuralNetwork {
+namespace Nork {
     public abstract class NeuralNetworkSaver {
         public static async Task SaveAsync( NeuralNetwork neuralNet, string path = "saves/neuralnetwork.nns" ) {
             try {
@@ -562,26 +562,26 @@ namespace NeuralNetwork {
         private double learningSpeed = 0.7;
         private double moment = 0.3;
     }
-}
 
-namespace ErrorController {
-    public abstract class Error {
-        public static double MSE( List< float > idealValues, List< double > actualValues ) {
-            double outError = 0;
-            var i = 0;
+    namespace ErrorController {
+        public abstract class Error {
+            public static double MSE( List< float > idealValues, List< double > actualValues ) {
+                double outError = 0;
+                var i = 0;
 
-            for ( i = 0; i < actualValues.Count; i++ ) {
-                if ( idealValues.Count > i ) {
-                    outError += Math.Pow( idealValues[i] - actualValues[i], 2 );
+                for ( i = 0; i < actualValues.Count; i++ ) {
+                    if ( idealValues.Count > i ) {
+                        outError += Math.Pow( idealValues[i] - actualValues[i], 2 );
+                    }
+                    else {
+                        outError += Math.Pow( 0 - actualValues[i], 2 );
+                    }
                 }
-                else {
-                    outError += Math.Pow( 0 - actualValues[i], 2 );
-                }
+                if ( !( outError >= 0 ) ) {
+                        Console.WriteLine( "error" );
+                    }
+                return outError / i;
             }
-            if ( !( outError >= 0 ) ) {
-                    Console.WriteLine( "error" );
-                }
-            return outError / i;
         }
     }
 }
