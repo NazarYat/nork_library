@@ -69,7 +69,7 @@ namespace Nork {
         public Layer OutputLayer {
             get => output_layer;
         }
-        public neuralNetworkOptions Options {
+        public NeuralNetworkOptions Options {
             get => options;
             set {
                 options = value;
@@ -80,24 +80,24 @@ namespace Nork {
         private List<Layer> recursive_connector_layers = new List<Layer>();
         private Layer output_layer;
         private List<double> neuralNetwork_output;
-        private neuralNetworkOptions options;
+        private NeuralNetworkOptions options;
 
-        public NeuralNetwork( neuralNetworkOptions newOptions ) {
+        public NeuralNetwork( NeuralNetworkOptions newOptions ) {
             options = newOptions;
             switch ( options.Type ) {
-                case neuralNetworkOptions.NeuralNetworkType.Perceptron:
+                case NeuralNetworkOptions.NeuralNetworkType.Perceptron:
                     GeneratePerceptron();
                     break;
 
-                case neuralNetworkOptions.NeuralNetworkType.DeepPerceptron:
+                case NeuralNetworkOptions.NeuralNetworkType.DeepPerceptron:
                     GenerateDeepPerceptron();
                     break;
 
-                case neuralNetworkOptions.NeuralNetworkType.AutoEncoder:
+                case NeuralNetworkOptions.NeuralNetworkType.AutoEncoder:
                     GenerateAutoEncoder();
                     break;
 
-                case neuralNetworkOptions.NeuralNetworkType.DCNN:
+                case NeuralNetworkOptions.NeuralNetworkType.DCNN:
                     GenerateDCNN();
                     break;
             }
@@ -454,7 +454,7 @@ namespace Nork {
         }
     }
     [Serializable]
-    public class neuralNetworkOptions {
+    public class NeuralNetworkOptions {
         public NeuralNetworkType Type {
             get => type;
             set {
@@ -563,9 +563,9 @@ namespace Nork {
         private double moment = 0.3;
     }
 
-    namespace ErrorController {
-        public abstract class Error {
-            public static double MSE( List< float > idealValues, List< double > actualValues ) {
+    namespace StatisticsCalculator {
+        public abstract class NeuralNetworkStatisticsCalculator {
+            public static double CalculateMSE( List< float > idealValues, List< double > actualValues ) {
                 double outError = 0;
                 var i = 0;
 
@@ -580,6 +580,21 @@ namespace Nork {
                 if ( !( outError >= 0 ) ) {
                         Console.WriteLine( "error" );
                     }
+                return outError / i;
+            }
+            public static double CalculateMiddleAccurancy( List< float > idealValues, List< double > actualValues, double minValue = 0, double maxValue = 1 ) {
+                double outError = 0;
+                var i = 0;
+
+                for ( i = 0; i < actualValues.Count; i++ ) {
+                    if ( idealValues.Count > i ) {
+                        outError += 100 - ( Math.Abs( idealValues[i] - actualValues[i] ) / ( maxValue - minValue ) ) * 100;
+                    }
+                    else {
+                        outError += 100 - ( Math.Abs( 0 - actualValues[i] ) / ( maxValue - minValue ) ) * 100;
+                    }
+                }
+
                 return outError / i;
             }
         }
